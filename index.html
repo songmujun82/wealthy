@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Birthday Wealth Blessing - Daily Fortune</title>
+  <style>
+    body {
+      background: radial-gradient(ellipse at center, #1a1a40 0%, #000010 100%);
+      color: #f0e6ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 20px;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #ffd700;
+      text-shadow: 0 0 12px #ffd700;
+      margin-bottom: 20px;
+    }
+    .input-area {
+      background: rgba(255,255,255,0.05);
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      max-width: 400px;
+      width: 100%;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    label {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #ffcc88;
+    }
+    input[type="date"] {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+      outline: none;
+      text-align: center;
+    }
+    button {
+      margin-top: 18px;
+      background: #ffd700;
+      border: none;
+      padding: 12px 30px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      color: #1a1a40;
+      box-shadow: 0 0 10px #ffd700;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ffb800;
+    }
+    .result-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      padding: 25px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      text-align: center;
+      user-select: none;
+    }
+    .label {
+      font-weight: bold;
+      font-size: 1.3rem;
+      color: #ffcc88;
+      margin-bottom: 8px;
+    }
+    .value {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #ffffff;
+      text-shadow: 0 0 10px #ffd700;
+    }
+    .color-box {
+      display: inline-block;
+      width: 45px;
+      height: 45px;
+      border-radius: 10px;
+      border: 2px solid #fff;
+      vertical-align: middle;
+      margin-left: 12px;
+      box-shadow: 0 0 8px #ffd700;
+    }
+    .blessing-text {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      font-style: italic;
+      color: #ffd;
+      text-shadow: 0 0 6px #ffb800;
+      user-select: text;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #666;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Birthday Wealth Blessing Ceremony</h1>
+  <div class="input-area">
+    <label for="birthday">Please enter your birthday:</label><br/>
+    <input type="date" id="birthday" max="" /><br/>
+    <button onclick="generateBlessing()">Generate Today's Fortune</button>
+  </div>
+  <div id="result" class="result-card" style="display:none;">
+    <div class="label">Your Lucky Number:</div>
+    <div id="luckyNumber" class="value">--</div>
+
+    <div class="label">Today's Lucky Color:</div>
+    <div class="value">
+      <span id="luckyColorName">--</span>
+      <span id="colorBox" class="color-box"></span>
+    </div>
+
+    <div class="label">Your Personal Blessing:</div>
+    <div id="blessing" class="blessing-text">--</div>
+  </div>
+
+  <footer>May the power of the universe always be with you | Aetheros NFT Prayer System</footer>
+
+  <script>
+    // 99 blessings
+    const blessings = [
+      "Wealth flows like the tide, never ending.",
+      "Your wallet will be filled with cosmic gold.",
+      "Money dances to the rhythm of your wishes.",
+      "Today, you are the vessel of abundance.",
+      "Every thought plants a seed of gold.",
+      "Your value is seen by the world.",
+      "Infinite universe wealth gathers to you.",
+      "You are the lucky star; wealth is born because of you.",
+      "You walk the path to the golden road.",
+      "Everything you touch turns into treasure.",
+      "You bring wealth to the world, and wealth returns to you.",
+      "Every breath is filled with attracting energy.",
+      "You deserve all the abundance.",
+      "Your fortune shines like starlight.",
+      "The door of luck opens for you today.",
+      "The universe's golden rain showers upon you.",
+      "All resources quietly approach you.",
+      "You possess the magic to turn stone into gold.",
+      "Wealth is seeking you and dancing with you.",
+      "Today is the beginning of a golden miracle.",
+      "Money flows freely because you deserve it.",
+      "Divine blessings empower your wallet.",
+      "Your frequency attracts infinite possibilities.",
+      "All things move for you; wealth belongs to you.",
+      "You are connected to the universe’s wealth without barrier.",
+      "You are the manifestation of wealth itself.",
+      "You are in the golden season of harvest.",
+      "The universe ledger has recorded your abundance.",
+      "Today you will receive unexpected wealth.",
+      "What you desire appears as money instantly.",
+      "All fears of money transform into power.",
+      "Your name is engraved in wealth.",
+      "You have awakened to attract money naturally.",
+      "Your light attracts abundant echoes.",
+      "You are becoming the incarnation of the god of fortune.",
+      "Every idea converts into value.",
+      "Today, your energy peaks.",
+      "You deserve a golden future.",
+      "You are on the path to the treasure.",
+      "You are the lucky one born in golden light.",
+      "Everything is perfect and abundant.",
+      "Today’s star shines the brightest for you.",
+      "Your heartbeat is the rhythm of wealth.",
+      "The code of wealth is etched in your soul.",
+      "Even the air you breathe smells of fortune today.",
+      "You are already tuned to the frequency of luck.",
+      "The spirit of wealth guards you today.",
+      "You are the guardian of prosperity’s gate.",
+      "Everything will be more abundant than imagined.",
+      "Inspiration plus action equals today’s wealth miracle.",
+      "May you be like light, gold, and wind.",
+      "Everything can be monetized, especially you.",
+      "You are a beam of light that lights up the goldmine.",
+      "Talent is recognized; wealth flows in.",
+      "You deserve all good rewards.",
+      "Harvest time is here; enjoy with peace.",
+      "You have planted a cycle of luck.",
+      "Your prayers are answered by the universe.",
+      "You are the most precious star among the constellations.",
+      "The golden world opens its door to you.",
+      "You will walk with miracles.",
+      "The god of wealth blesses you.",
+      "Today’s fortune shines like stars.",
+      "May wealth follow you like a shadow.",
+      "The goddess of luck smiles at you.",
+      "The road of wealth is paved for you.",
+      "You are a money magnet, unstoppable.",
+      "The wave of wealth will lift you.",
+      "You hold gold in your heart, gold returns to you.",
+      "May you harvest abundant fruits.",
+      "Money flows as smoothly as a creek.",
+      "You are the favored child of cosmic wealth.",
+      "The god of wealth specially cares for you today.",
+      "Wealth energy flows through you.",
+      "You will welcome the spring of fortune.",
+      "Good luck and wealth are with you.",
+      "You hold the key to the gate of wealth.",
+      "All money will be attracted to you.",
+      "The star of wealth shines for you.",
+      "You symbolize the golden age.",
+      "Spirituality and wealth perfectly combine.",
+      "Today is a day of plenty.",
+      "You will meet life-changing wealth opportunities.",
+      "Wishing you full vaults and endless income.",
+      "Your glow attracts wealth.",
+      "May you be surrounded by a golden aura.",
+      "The garden of wealth blooms for you.",
+      "Today you are the embodiment of gold.",
+      "You stand at the peak of luck.",
+      "The flood of wealth rushes toward you.",
+      "You will experience joyful wealth.",
+      "Every moment today brings wealth.",
+      "You are always lucky in the lottery of life.",
+      "Blessings from the universe overflow to you."
+    ];
+
+    // Color set with name and hex
+    const colors = [
+      {name: "Goldenrod", hex: "#DAA520"},
+      {name: "Royal Blue", hex: "#4169E1"},
+      {name: "Crimson", hex: "#DC143C"},
+      {name: "Deep Sky Blue", hex: "#00BFFF"},
+      {name: "Dark Orange", hex: "#FF8C00"},
+      {name: "Medium Purple", hex: "#9370DB"},
+      {name: "Tomato", hex: "#FF6347"},
+      {name: "Turquoise", hex: "#40E0D0"},
+      {name: "Chartreuse", hex: "#7FFF00"},
+      {name: "Coral", hex: "#FF7F50"},
+      {name: "Light Sea Green", hex: "#20B2AA"},
+      {name: "Medium Violet Red", hex: "#C71585"},
+      {name: "Orange Red", hex: "#FF4500"},
+      {name: "Dodger Blue", hex: "#1E90FF"},
+      {name: "Medium Slate Blue", hex: "#7B68EE"},
+      {name: "Salmon", hex: "#FA8072"},
+      {name: "Medium Aquamarine", hex: "#66CDAA"},
+      {name: "Dark Goldenrod", hex: "#B8860B"},
+      {name: "Light Coral", hex: "#F08080"},
+      {name: "Steel Blue", hex: "#4682B4"},
+      {name: "Medium Orchid", hex: "#BA55D3"},
+      {name: "Light Salmon", hex: "#FFA07A"},
+      {name: "Pale Green", hex: "#98FB98"},
+      {name: "Sandy Brown", hex: "#F4A460"},
+      {name: "Medium Turquoise", hex: "#48D1CC"},
+      {name: "Rosy Brown", hex: "#BC8F8F"},
+      {name: "Slate Blue", hex: "#6A5ACD"},
+      {name: "Tomato", hex: "#FF6347"},
+      {name: "Light Steel Blue", hex: "#B0C4DE"},
+      {name: "Violet", hex: "#EE82EE"},
+      {name: "Light Sky Blue", hex: "#87CEFA"},
+      {name: "Medium Sea Green", hex: "#3CB371"},
+      {name: "Dark Orchid", hex: "#9932CC"},
+      {name: "Light Pink", hex: "#FFB6C1"},
+      {name: "Yellow Green", hex: "#9ACD32"},
+      {name: "Steel Blue", hex: "#4682B4"},
+      {name: "Dark Turquoise", hex: "#00CED1"},
+      {name: "Orange", hex: "#FFA500"},
+      {name: "Plum", hex: "#DDA0DD"},
+      {name: "Peru", hex: "#CD853F"},
+      {name: "Medium Slate Blue", hex: "#7B68EE"},
+      {name: "Tomato", hex: "#FF6347"},
+      {name: "Turquoise", hex: "#40E0D0"},
+      {name: "Sienna", hex: "#A0522D"},
+      {name: "Light Goldenrod Yellow", hex: "#FAFAD2"},
+      {name: "Medium Orchid", hex: "#BA55D3"},
+      {name: "Cornflower Blue", hex: "#6495ED"},
+      {name: "Pale Violet Red", hex: "#DB7093"},
+      {name: "Dark Salmon", hex: "#E9967A"},
+      {name: "Medium Purple", hex: "#9370DB"},
+      {name: "Light Slate Gray", hex: "#778899"},
+      {name: "Light Cyan", hex: "#E0FFFF"},
+      {name: "Khaki", hex: "#F0E68C"},
+      {name: "Royal Blue", hex: "#4169E1"},
+      {name: "Medium Sea Green", hex: "#3CB371"},
+      {name: "Steel Blue", hex: "#4682B4"},
+      {name: "Slate Gray", hex: "#708090"},
+      {name: "Light Blue", hex: "#ADD8E6"},
+      {name: "Medium Violet Red", hex: "#C71585"},
+      {name: "Dark Sea Green", hex: "#8FBC8F"},
+      {name: "Deep Pink", hex: "#FF1493"},
+      {name: "Medium Aquamarine", hex: "#66CDAA"},
+      {name: "Dark Violet", hex: "#9400D3"},
+      {name: "Light Steel Blue", hex: "#B0C4DE"},
+      {name: "Light Sky Blue", hex: "#87CEFA"},
+      {name: "Pale Turquoise", hex: "#AFEEEE"},
+      {name: "Violet Red", hex: "#D02090"},
+      {name: "Medium Slate Blue", hex: "#7B68EE"},
+      {name: "Sandy Brown", hex: "#F4A460"},
+      {name: "Light Pink", hex: "#FFB6C1"},
+      {name: "Turquoise", hex: "#40E0D0"},
+      {name: "Medium Purple", hex: "#9370DB"},
+      {name: "Tomato", hex: "#FF6347"},
+      {name: "Pale Green", hex: "#98FB98"},
+      {name: "Dark Orange", hex: "#FF8C00"},
+      {name: "Royal Blue", hex: "#4169E1"},
+      {name: "Goldenrod", hex: "#DAA520"},
+      {name: "Medium Orchid", hex: "#BA55D3"},
+      {name: "Deep Sky Blue", hex: "#00BFFF"},
+      {name: "Light Coral", hex: "#F08080"},
+      {name: "Orange Red", hex: "#FF4500"},
+      {name: "Medium Sea Green", hex: "#3CB371"},
+      {name: "Light Goldenrod Yellow", hex: "#FAFAD2"},
+      {name: "Dark Goldenrod", hex: "#B8860B"},
+      {name: "Light Salmon", hex: "#FFA07A"},
+      {name: "Steel Blue", hex: "#4682B4"},
+      {name: "Medium Turquoise", hex: "#48D1CC"},
+      {name: "Dark Orchid", hex: "#9932CC"},
+      {name: "Pale Violet Red", hex: "#DB7093"},
+      {name: "Light Sea Green", hex: "#20B2AA"},
+      {name: "Coral", hex: "#FF7F50"},
+      {name: "Dark Slate Blue", hex: "#483D8B"},
+      {name: "Sienna", hex: "#A0522D"},
+      {name: "Tomato", hex: "#FF6347"},
+      {name: "Light Steel Blue", hex: "#B0C4DE"},
+      {name: "Violet", hex: "#EE82EE"},
+      {name: "Light Sky Blue", hex: "#87CEFA"},
+      {name: "Medium Violet Red", hex: "#C71585"},
+      {name: "Medium Slate Blue", hex: "#7B68EE"},
+      {name: "Dark Turquoise", hex: "#00CED1"},
+      {name: "Light Pink", hex: "#FFB6C1"},
+      {name: "Medium Purple", hex: "#9370DB"},
+      {name: "Sandy Brown", hex: "#F4A460"},
+      {name: "Light Salmon", hex: "#FFA07A"},
+      {name: "Pale Green", hex: "#98FB98"},
+      {name: "Medium Aquamarine", hex: "#66CDAA"},
+      {name: "Rosy Brown", hex: "#BC8F8F"},
+      {name: "Slate Blue", hex: "#6A5ACD"},
+      {name: "Steel Blue", hex: "#4682B4"},
+      {name: "Medium Orchid", hex: "#BA55D3"},
+      {name: "Light Goldenrod Yellow", hex: "#FAFAD2"},
+      {name: "Light Cyan", hex: "#E0FFFF"},
+      {name: "Khaki", hex: "#F0E68C"},
+      {name: "Royal Blue", hex: "#4169E1"},
+      {name: "Medium Sea Green", hex: "#3CB371"},
+      {name: "Slate Gray", hex: "#708090"},
+      {name: "Light Blue", hex: "#ADD8E6"},
+      {name: "Dark Sea Green", hex: "#8FBC8F"},
+      {name: "Deep Pink", hex: "#FF1493"},
+      {name: "Dark Violet", hex: "#9400D3"},
+      {name: "Pale Turquoise", hex: "#AFEEEE"},
+      {name: "Violet Red", hex: "#D02090"},
+      {name: "Light Pink", hex: "#FFB6C1"},
+      {name: "Orange", hex: "#FFA500"},
+      {name: "Plum", hex: "#DDA0DD"},
+      {name: "Peru", hex: "#CD853F"},
+      {name: "Cornflower Blue", hex: "#6495ED"},
+      {name: "Dark Salmon", hex: "#E9967A"},
+      {name: "Light Slate Gray", hex: "#778899"},
+      {name: "Light Cyan", hex: "#E0FFFF"},
+      {name: "Khaki", hex: "#F0E68C"},
+      {name: "Royal Blue", hex: "#4169E1"},
+      {name: "Medium Sea Green", hex: "#3CB371"},
+      {name: "Steel Blue", hex: "#4682B4"},
+      {name: "Slate Gray", hex: "#708090"}
+    ];
+
+    // Generate a pseudo-random integer based on seed (birthday string)
+    function seededRandom(seed) {
+      let h = 0;
+      for (let i = 0; i < seed.length; i++) {
+        h = Math.imul(31, h) + seed.charCodeAt(i) | 0;
+      }
+      return (Math.abs(h) % 1000000) / 1000000;
+    }
+
+    function generateBlessing() {
+      const birthdayInput = document.getElementById('birthday');
+      const birthday = birthdayInput.value;
+
+      if (!birthday) {
+        alert("Please enter your birthday!");
+        return;
+      }
+
+      // Seed for repeatable results per birthday + date
+      const today = new Date();
+      const dateStr = today.toISOString().slice(0, 10); // YYYY-MM-DD
+
+      // Combined seed string: birthday + today's date for daily change
+      const seedStr = birthday + dateStr;
+
+      // Generate random number between 0 and 1 based on seed
+      const rand = seededRandom(seedStr);
+
+      // Lucky Number: between 1 and 99
+      const luckyNumber = Math.floor(rand * 99) + 1;
+
+      // Select blessing
+      const blessing = blessings[luckyNumber - 1];
+
+      // Select color from colors array
+      const colorIndex = Math.floor(rand * colors.length);
+      const color = colors[colorIndex];
+
+      // Display results
+      document.getElementById('luckyNumber').textContent = luckyNumber;
+      document.getElementById('luckyColorName').textContent = color.name;
+      document.getElementById('colorBox').style.backgroundColor = color.hex;
+      document.getElementById('blessing').textContent = blessing;
+
+      document.getElementById('result').style.display = 'block';
+    }
+
+    // Set max date for birthday input as today
+    document.getElementById('birthday').max = new Date().toISOString().slice(0,10);
+  </script>
+</body>
+</html>
